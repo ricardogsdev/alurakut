@@ -12,6 +12,9 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: sans-serif;
     background: linear-gradient(to top, #5140bb 0%, #7144c2 100%);
+    background-image: url('https://media-exp3.licdn.com/dms/image/C561BAQFWAWkrDxHtYw/company-background_10000/0/1611655676415?e=2159024400&v=beta&t=99F5WfOoGVHLUPekVp8LT0XQ9q6Vbro6qEKoHz4Ldqw');
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 
   #__next {
