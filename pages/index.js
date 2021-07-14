@@ -76,7 +76,7 @@ export default function Home() {
         <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
           <Box>
             <h1 className="title">
-              Bem vindos(as) 
+              Bem vindo(a)
             </h1>
 
             <OrkutNostalgicIconSet />
