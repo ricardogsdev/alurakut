@@ -11,7 +11,6 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: sans-serif;
-    background-image: url(https://sistema.optovision.com.br/images/pattern.png);
     background: linear-gradient(to top, #5140bb 0%, #7144c2 100%);
   }
 
