@@ -57,10 +57,10 @@ function DepoimentosBox(propriedades) {
                 marginBottom: "8px",
                 borderBottom: "1px solid #e1e1e1",
                 }}>
-              <figure style={{ width: "20%", marginBottom: "20px" }}>
-                <img src={itemAtual.fotodepo} style={{ borderRadius: "1000%" }} />
+              <figure style={{ width: "10%", marginBottom: "10px" }}>
+                <img src={`https://github.com/${itemAtual.fotodepo}.png`} style={{ borderRadius: "1000%" }} />
               </figure>
-              <div style={{ padding: "30px" }}>
+              <div style={{ padding: "10px" }}>
                 <p>{itemAtual.depoimento}</p>
               </div>  
             </div>
@@ -220,11 +220,11 @@ export default function Home() {
             <form onSubmit={function handleCriaDepoimento(e){
               e.preventDefault();
               const dadosDoForm = new FormData(e.target);
-              console.log('Campo: ', dadosDoForm.get('fotodepo'));
+              console.log('Campo: ', dadosDoForm.get('creatorslug'));
               console.log('Campo: ', dadosDoForm.get('depoimento'));
 
               const depoimento = {
-                fotodepo: dadosDoForm.get('fotodepo'),
+                fotodepo: dadosDoForm.get('creatorslug'),
                 depoimento: dadosDoForm.get('depoimento')
               }
 
@@ -247,11 +247,10 @@ export default function Home() {
 
               <div>
                 <input 
-                  placeholder="" 
-                  name="fotodepo" 
+                  placeholder="Nome de usuario github ex:ricardogsdev" 
+                  name="creatorslug" 
                   aria-label="foto depoimento"
-                  type="hidden"
-                  value= {fotoDepo}
+                  type="text"
                 />
               </div>
               <div>
