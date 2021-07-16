@@ -41,39 +41,40 @@ function ProfileRelationsBox(propriedades) {
     </ProfileRelationsBoxWrapper>
   )
 }
+function DepoimentosBox(propriedades) {
+  return(
+    <Box>
+      <h2 className="smallTitle">
+        {propriedades.title} ({propriedades.items.length})
+      </h2>
+      
+      <div>
+        {propriedades.items.map((itemAtual) => {
+          return (
+              <div key={itemAtual.id} style={{ 
+                display: "flex",
+                marginTop: "12px",
+                marginBottom: "8px",
+                borderBottom: "1px solid #e1e1e1",
+                }}>
+              <figure style={{ width: "20%", marginBottom: "20px" }}>
+                <img src={itemAtual.fotodepo} style={{ borderRadius: "1000%" }} />
+              </figure>
+              <div style={{ padding: "30px" }}>
+                <p>{itemAtual.depoimento}</p>
+              </div>  
+            </div>
+            
+          )
+        })}
+      </div>
+    </Box>
+  )
+}
 
 export default function Home() {
-  const [comunidades, setComunidades] = React.useState([{
-    id: '21212323144423424',
-    title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
-  },
-  {
-    id: '212123231212212124',
-    title: 'Eu amo Friends',
-    image: 'https://ogimg.infoglobo.com.br/in/24961032-6b5-270/FT1086A/84471251_Friends.jpg',
-  },
-  {
-    id: '212123231212212233232312124',
-    title: 'Eu amo Chocolates',
-    image: 'https://img10.orkut.br.com/community/1923f66630619bb6fd6036167043c6ba.jpg',
-  },
-  {
-    id: '2121232312165446565465',
-    title: 'Herrar é o mano',
-    image: 'https://img10.orkut.br.com/community/423e6ca71003dcf126a18cbd0ef1dcf0.JPG',
-  },
-  {
-    id: '2121232312165446565465',
-    title: 'Se eu não comprar nada o desconto é maior',
-    image: 'https://pbs.twimg.com/profile_images/1126432627/raddd_400x400.jpg',
-  },
-  {
-    id: '2121232312165446565465121212',
-    title: 'Cheguei atrasado no enem',
-    image: 'http://s2.glbimg.com/Rq1ZiekWZnQNgOuNfAaSW4rLIxWPiGlggUpwtI86h-5Ioz-HdGixxa_8qOZvMp3w/s.glbimg.com/jo/g1/f/original/2012/11/03/aluna-atrasada.jpg',
-  }
-]);
+  const [comunidades, setComunidades] = React.useState([]);
+  const [depoimentos, setDepoimentos] = React.useState([]);
   
   //const comunidades = ['Alurakut'];
   const usuarioAleatorio = 'ricardogsdev';
@@ -85,6 +86,7 @@ export default function Home() {
     'marcobrunodev',
     'felipefialho'
   ]
+  const fotoDepo = 'https://picsum.photos/300/300?' + Math.random();
  
   const [seguidores, setSeguidores] = React.useState([]);
   React.useEffect(function(){
@@ -94,6 +96,53 @@ export default function Home() {
     })
     .then(function(respostaCompleta){
       setSeguidores(respostaCompleta); 
+    })
+
+     // API GraphQL
+     fetch('https://graphql.datocms.com/', {
+      method: 'POST',
+      headers: {
+        'Authorization': '03ecfd27aad15b05186dc181ce282c',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ "query": `query {
+        allCommunities {
+          id 
+          title
+          imageUrl
+          creatorSlug
+        }
+      }` })
+    })
+    .then((response) => response.json()) // Pega o retorno do response.json() e já retorna
+    .then((respostaCompleta) => {
+      const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
+      console.log(comunidadesVindasDoDato)
+      setComunidades(comunidadesVindasDoDato)
+    })
+
+    // API GraphQL
+    fetch('https://graphql.datocms.com/', {
+      method: 'POST',
+      headers: {
+        'Authorization': '03ecfd27aad15b05186dc181ce282c',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ "query": `query {
+        allTestimonials {
+        id
+        depoimento 
+        fotodepo
+       }
+      }` })
+    })
+    .then((response) => response.json()) // Pega o retorno do response.json() e já retorna
+    .then((respostaCompletaDepo) => {
+      const depoimentosVindasDoDato = respostaCompletaDepo.data.allTestimonials;
+      console.log(depoimentosVindasDoDato)
+      setDepoimentos(depoimentosVindasDoDato)
     })
   }, []) 
 
@@ -114,7 +163,7 @@ export default function Home() {
             <OrkutNostalgicIconSet />
           </Box>
           <Box>
-            <h2 className="subTitle"> O Que voce deseja fazer? </h2>
+            <h2 className="subTitle"> Crie uma Comunidade. </h2>
             <form onSubmit={function handleCriaComunidade(e){
               e.preventDefault();
               const dadosDoForm = new FormData(e.target);
@@ -122,36 +171,111 @@ export default function Home() {
               console.log('Campo: ', dadosDoForm.get('image'));
 
               const comunidade = {
-                id: new Date().toISOString(),
                 title: dadosDoForm.get('title'),
-                image: dadosDoForm.get('image'),
+                imageUrl: dadosDoForm.get('image'),
+                creatorSlug: usuarioAleatorio,
               }
-              //comunidades.push(`Alura Stars`);
-              const comunidadesAtualizadas = [...comunidades, comunidade];
-              setComunidades(comunidadesAtualizadas)
+
+              fetch('/api/comunidades', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(comunidade)
+              })
+              .then(async (response) => {
+                const dados = await response.json();
+                console.log(dados.registroCriado);
+                const comunidade = dados.registroCriado;
+                const comunidadesAtualizadas = [...comunidades, comunidade];
+                setComunidades(comunidadesAtualizadas)
+              })
               
-            }}>
-              <div>
+            }}
+            
+            >
+              <div style={{float: "left", width: "50%"}}>
                 <input 
-                  placeholder="Qual vai ser o nome da sua comunidade?" 
+                  placeholder="Nome da comunidade?" 
                   name="title" 
-                  aria-label="Qual vai ser o nome da sua comunidade?"
+                  aria-label="Nome da comunidade?"
                   type="text"
                 />
               </div>
-              <div>
+              <div style={{float: "left", width: "50%"}}>
                 <input 
-                  placeholder="Coloque uma URL para usarmos de capa" 
+                  placeholder="URL da imagem" 
                   name="image" 
-                  aria-label="Coloque uma URL para usarmos de capa"
+                  aria-label="URL da imagem"
                   type="text"
                 />
               </div>
-              <button>
-                Criar comunidade
+              <button >
+                    Criar Comunidade
               </button>
             </form>
           </Box>
+          <Box>
+            <h2 className="subTitle"> Deixe um depoimento. </h2>
+            <form onSubmit={function handleCriaDepoimento(e){
+              e.preventDefault();
+              const dadosDoForm = new FormData(e.target);
+              console.log('Campo: ', dadosDoForm.get('fotodepo'));
+              console.log('Campo: ', dadosDoForm.get('depoimento'));
+
+              const depoimento = {
+                fotodepo: dadosDoForm.get('fotodepo'),
+                depoimento: dadosDoForm.get('depoimento')
+              }
+
+              fetch('/api/depoimentos', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(depoimento)
+              })
+              .then(async (response) => {
+                const dadosDepo = await response.json();
+                console.log(dadosDepo.registroCriado);
+                const depoimento = dadosDepo.registroCriado;
+                const depoimentosAtualizados = [...depoimentos, depoimento];
+                setDepoimentos(depoimentosAtualizados)
+              })
+              
+            }}>
+
+              <div>
+                <input 
+                  placeholder="" 
+                  name="fotodepo" 
+                  aria-label="foto depoimento"
+                  type="hidden"
+                  value= {fotoDepo}
+                />
+              </div>
+              <div>
+                <textarea
+                  placeholder="Diga o que esta achando do curso..." 
+                  name="depoimento" 
+                  aria-label="Deixe um depoimento"
+                  rows="5"
+                  style={{ width: '100%',
+                  display: 'block',
+                  border: '1px solid var(--textQuarternaryColor)',
+                  padding: '12px',
+                  backgroundColor: 'var(--backgroundTertiary)',
+                  borderRadius: 'var(--commonRadius)',
+                  marginTop: '24px',
+                  marginBottom: '16px'}}
+                />
+              </div>
+              <button>
+                Criar Depoimento
+              </button>
+            </form>
+          </Box>
+          <DepoimentosBox title="Depoimentos" items={depoimentos} />
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
           <ProfileRelationsBox title="seguidores" items={seguidores} />
@@ -164,8 +288,8 @@ export default function Home() {
               {comunidades.map((itemAtual) => {
                 return (
                   <li key={itemAtual.id}>
-                    <a href={`/users/${itemAtual.title}`} key={itemAtual.title}>
-                      <img src={itemAtual.image} />
+                    <a href={`/comunities/${itemAtual.id}`} key={itemAtual.title}>
+                      <img src={itemAtual.imageUrl} />
                       <span>{itemAtual.title}</span>
                     </a>
                   </li>
