@@ -225,12 +225,14 @@ export default function Home(props) {
               const dadosDoForm = new FormData(e.target);
               console.log('Campo: ', dadosDoForm.get('creatorslug'));
               console.log('Campo: ', dadosDoForm.get('depoimento'));
-
+              
               const depoimento = {
                 fotodepo: dadosDoForm.get('creatorslug'),
                 depoimento: dadosDoForm.get('depoimento')
               }
-
+              if(depoimento.fotodepo === null || depoimento.fotodepo === "" || depoimento.depoimento === "" || depoimento.depoimento === "" ){
+                alert('Você precisa preencher todo os campos.')
+              }else{
               fetch('/api/depoimentos', {
                 method: 'POST',
                 headers: {
@@ -245,6 +247,7 @@ export default function Home(props) {
                 const depoimentosAtualizados = [...depoimentos, depoimento];
                 setDepoimentos(depoimentosAtualizados)
               })
+            }
               
             }}>
 
