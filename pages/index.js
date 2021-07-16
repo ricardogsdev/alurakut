@@ -261,7 +261,7 @@ export default function Home(props) {
               </div>
               <div>
                 <textarea
-                  placeholder="Diga o que esta achando do curso..." 
+                  placeholder="O que achou do meu projeto?..." 
                   name="depoimento" 
                   aria-label="Deixe um depoimento"
                   rows="5"
