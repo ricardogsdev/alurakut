@@ -60,10 +60,11 @@ function DepoimentosBox(propriedades) {
                 borderBottom: "1px solid #e1e1e1",
                 }}>
               <figure style={{ width: "10%", marginBottom: "10px" }}>
-                <img src={`https://github.com/${itemAtual.fotodepo}.png`} style={{ borderRadius: "1000%" }} />
+                <a href={`https://github.com/${itemAtual.fotodepo}`} key={itemAtual}><img src={`https://github.com/${itemAtual.fotodepo}.png`} style={{ borderRadius: "1000%" }} /></a>
               </figure>
               <div style={{ padding: "10px" }}>
                 <p>{itemAtual.depoimento}</p>
+                <span style={{ fontSize: "10px"}}>por:<a href={`https://github.com/${itemAtual.fotodepo}`} style={{ textDecoration: "none", color: "#673ab7" }}> @{itemAtual.fotodepo}</a></span>
               </div>  
             </div>
             
