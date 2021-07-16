@@ -257,6 +257,14 @@ export default function Home(props) {
                   name="creatorslug" 
                   aria-label="foto depoimento"
                   type="text"
+                  style={{ width: '100%',
+                  display: 'block',
+                  border: '1px solid var(--textQuarternaryColor)',
+                  padding: '12px',
+                  backgroundColor: 'var(--backgroundTertiary)',
+                  borderRadius: 'var(--commonRadius)',
+                  marginTop: '24px',
+                  marginBottom: '16px'}}
                 />
               </div>
               <div>
