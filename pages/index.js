@@ -333,14 +333,14 @@ export async function getServerSideProps(context){
   })
   .then((resposta) => resposta.json())
   console.log('Usuário Logado: ', isAuthenticated);
-  /*if(!isAuthenticated) {
+  if(!isAuthenticated) {
     return {
       redirect: {
         destination: '/login',
         permanent: false,
       }
     }
-  }*/
+  }
   const { githubUser } = jwt.decode(token);
   return {
     props: {
