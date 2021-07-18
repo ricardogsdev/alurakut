@@ -1,7 +1,7 @@
 import React from 'react';
 import nookies from 'nookies';
 import jwt from 'jsonwebtoken';
-import MainGridAmigos from '../src/components/MainGrid/amigos.js'
+import MainGridComunidades from '../src/components/MainGrid/comunidades.js'
 import Box from '../src/components/Box'
 import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons';
 import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
@@ -151,16 +151,33 @@ export default function Home(props) {
 
   return (
     <>
-      <AlurakutMenu githubUser={usuarioAleatorio} />
-      <MainGridAmigos>
+      <AlurakutMenu githubUser={usuarioAleatorio}/>
+      <MainGridComunidades>
         {/* <Box style="grid-area: profileArea;"> */}
         <div className="profileArea" style={{ gridArea: 'profileArea' }}>
           <ProfileSidebar githubUser={usuarioAleatorio} />
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'welcomeArea' }}>
-          <ProfileRelationsBox title="seguidores" items={seguidores} />
+        <ProfileRelationsBoxWrapper>
+            <h2 className="smallTitle">
+              Comunidades ({comunidades.length})
+            </h2>
+            
+            <ul>
+              {comunidades.map((itemAtual) => {
+                return (
+                  <li key={itemAtual.id}>
+                    <a href={`/comunities/${itemAtual.id}`} key={itemAtual.title}>
+                      <img src={itemAtual.imageUrl} />
+                      <span>{itemAtual.title}</span>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </ProfileRelationsBoxWrapper>
         </div>
-      </MainGridAmigos>
+      </MainGridComunidades>
     </>
   )
 }

@@ -253,7 +253,7 @@ export default function Home(props) {
 
               <div>
                 <input 
-                  placeholder="Nome do seu usuario github ex:peas" 
+                  placeholder="Usuario github" 
                   name="creatorslug" 
                   aria-label="foto depoimento"
                   type="text"
