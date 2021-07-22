@@ -28,7 +28,7 @@ A Imersão React é um projeto do Alura de forma gratuita e é voltada para prof
 
 ## Instalação
 <pre><code>- Clonar repositorio
-$ git clone https://github.com/carolandrade1/alurakut.git &amp;&amp; cd alurakut
+$ git clone https://github.com/ricardogsdev/alurakut.git &amp;&amp; cd alurakut
 
 - Instalar dependencias
 $ npm install
